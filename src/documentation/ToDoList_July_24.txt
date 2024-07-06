@@ -1,0 +1,4 @@
+1. App Start Page ( Create, Take, View )
+2. Create seperate components for each ApplicationState
+3. Each Application state process are components
+4. 
