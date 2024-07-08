@@ -2,14 +2,15 @@
   <main>
     <NavbarComponent></NavbarComponent>
     <section class="hero">
-      <LoginInputComponent></LoginInputComponent>
+      <LoginInput></LoginInput>
     </section>
   </main>
 </template>
 
 <script setup>
 import NavbarComponent from '../components/NavigationBar.vue'
-import LoginInputComponent from '../components/account/Component_LoginInput.vue';
+import LoginInput from '../components/accountManagement/loginInput.vue';
+
 </script>
 
 

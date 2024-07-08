@@ -5,7 +5,7 @@
         <RouterLink class="navLink" to="/app"> App </RouterLink>
 
         <div class="LoginLinkContainer"> 
-            <RouterLink class="navLogin LoginLink" to="/login"> {{ sessionActive ? userEmail : "Login" }} </RouterLink>
+            <RouterLink class="navLogin LoginLink" to="/login"> {{ store.logStatus ? store.email: "Login" }} </RouterLink>
         </div>
     </nav>
 </template>
@@ -13,6 +13,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { supabase } from "../clients/supabase";
+import { useAccountStore } from "@/stores/account";
+
+const store = useAccountStore();
 
 let sessionActive = ref(false);
 let userEmail = ref("");
@@ -30,6 +33,7 @@ async function checkSession()
 
 onMounted(() => {
     checkSession();
+    store.registerUser();
 })
 
 </script>

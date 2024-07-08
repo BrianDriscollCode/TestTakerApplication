@@ -32,7 +32,13 @@ const router = createRouter({
       path: '/createaccount',
       name: 'createaccount',
       component: () => import('../views/CreateAccount.vue')
-    }
+    },
+    {
+      path: '/accountManagement',
+      name: 'accountManagement',
+      component: () => import('../views/AccountManagementView.vue')
+    },
+
   ]
 })
 

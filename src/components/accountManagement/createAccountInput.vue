@@ -5,7 +5,6 @@
           <input v-model="email" placeholder="Email" />
           <input v-model="password" placeholder="Password" />
           <button @click="createAccount">Create Account</button>
-          <button @click="getSession"> Get Session </button>
           <div class="otherOptions">
             <RouterLink class="otherOptionsLink" to="./login"> ...Back to Login </RouterLink>
             <a class="otherOptionsLink" href="#"> Guest Sign In </a>
@@ -25,28 +24,17 @@ async function createAccount()
 {
   const { data, error } = await supabase.auth.signUp({
     email: email.value,
-    password: password.value
+    password: password.value,
+    options: 
+    {
+      data:
+      {
+        first_name: name.value
+      }
+    }
   })
 
-  if (error)
-  {
-    console.log(error);
-  }
-  else
-  {
-    console.log(data);
-  }
-}
-
-async function getSession()
-{
-  const { data: { user } } = await supabase.auth.getUser();
-  console.log(user);
-}
-
-function login()
-{
-console.log("login");
+  if (error) throw error;
 }
 
 </script>

@@ -2,15 +2,17 @@
     <main>
       <NavbarComponent></NavbarComponent>
       <section class="hero">
-        <CreateAccountComponent></CreateAccountComponent>
+        <AccountTool> </AccountTool>
       </section>
     </main>
   </template>
   
   <script setup>
   import NavbarComponent from '../components/NavigationBar.vue'
-  import CreateAccountComponent from '@/components/accountManagement/createAccountInput.vue';
+  import AccountTool from '../components/accountManagement/accountManagementTool.vue';
+  
   </script>
+  
   
   <style scoped>
   main {

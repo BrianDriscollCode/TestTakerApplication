@@ -2,10 +2,9 @@
     <div class="login-container">
         <h2>Login</h2>
         <form class="login-form" @submit.prevent>
-            <input v-model="email" placeholder="Email" required />
+            <input v-model="userEmail" placeholder="Email" required />
             <input v-model="password" placeholder="Password" required />
             <button @click="login">Login</button>
-            <button @click="signOut"> Sign Out </button>
             <div class="otherOptions">
               <RouterLink class="otherOptionsLink" to="./createaccount"> Create Account </RouterLink>
               <a class="otherOptionsLink" href="#"> Guest Sign In </a>
@@ -15,27 +14,29 @@
 </template>
 
 <script setup>
+import { useAccountStore } from '@/stores/account'
 import { ref } from "vue";
 import { supabase } from "../../clients/supabase";
 
-let email = ref("");
-let password = ref("");
+const store = useAccountStore();
 
+let userEmail = ref("");
+let password = ref("");
 
 async function login()
 {
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.value,
+    email: userEmail.value,
     password: password.value
   })
 
-  console.log(data)
-}
+  if (error) throw error;
 
-async function signOut()
-{
-  const { error } = await supabase.auth.signOut();
-  console.log(error);
+  store.$patch({
+    email: data.user.email,
+    id: data.user.id,
+    logStatus: true
+  })
 }
 
 </script>
