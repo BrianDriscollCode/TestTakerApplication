@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
     <nav class="nav">
         <RouterLink class="navLink" to="/"> Home </RouterLink>
@@ -9,10 +5,34 @@
         <RouterLink class="navLink" to="/app"> App </RouterLink>
 
         <div class="LoginLinkContainer"> 
-            <RouterLink class="navLogin LoginLink" to="/login"> Login </RouterLink>
+            <RouterLink class="navLogin LoginLink" to="/login"> {{ sessionActive ? userEmail : "Login" }} </RouterLink>
         </div>
     </nav>
 </template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import { supabase } from "../clients/supabase";
+
+let sessionActive = ref(false);
+let userEmail = ref("");
+
+async function checkSession()
+{
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user)
+    {
+        sessionActive.value = true;
+        userEmail.value = user.email;
+    }
+}
+
+onMounted(() => {
+    checkSession();
+})
+
+</script>
 
 <style scoped>
 .nav 

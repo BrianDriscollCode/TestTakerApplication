@@ -2,9 +2,10 @@
   <div class="login-container">
       <h2>Create Account</h2>
       <form class="login-form" @submit.prevent>
-          <input v-model="username" placeholder="Email" required />
-          <input v-model="password" placeholder="Password" required />
-          <button @click="login">Create Account</button>
+          <input v-model="email" placeholder="Email" />
+          <input v-model="password" placeholder="Password" />
+          <button @click="createAccount">Create Account</button>
+          <button @click="getSession"> Get Session </button>
           <div class="otherOptions">
             <RouterLink class="otherOptionsLink" to="./login"> ...Back to Login </RouterLink>
             <a class="otherOptionsLink" href="#"> Guest Sign In </a>
@@ -17,24 +18,30 @@
 import { ref } from "vue";
 import { supabase } from "../../clients/supabase";
 
-let username = ref("");
+let email= ref("");
 let password = ref("");
 
 async function createAccount()
 {
-const { data, error } = await supabase.auth.signUp({
-  email: email.value,
-  password: password.value
-})
+  const { data, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value
+  })
 
-if (error)
-{
-  console.log(error);
+  if (error)
+  {
+    console.log(error);
+  }
+  else
+  {
+    console.log(data);
+  }
 }
-else
+
+async function getSession()
 {
-  console.log(data);
-}
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log(user);
 }
 
 function login()
