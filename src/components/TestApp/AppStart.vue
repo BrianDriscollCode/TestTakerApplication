@@ -3,7 +3,7 @@
 
 <template>
   <main class="main-container">
-    <div class="button">Create Test</div>
+    <div class="button" @click="$emit('initCreateTest')">Create Test</div>
     <div class="button">Take Test</div>
     <div class="button">See Test Results</div>
   </main>

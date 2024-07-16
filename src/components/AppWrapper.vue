@@ -1,12 +1,28 @@
-<script setup>
-import TestApp from './TestApp/TestApp.vue'
-</script>
-
 <template>
   <main class="main-container">
-    <TestApp class="app"> </TestApp>
+    <AppStart class="app" v-if="state.AppStart" v-on:initCreateTest="loadInitCreateTest"> </AppStart>
+    <InitCreateTest v-if="state.InitCreateTest"> </InitCreateTest>
   </main>
 </template>
+
+<script setup>
+import AppStart from './TestApp/AppStart.vue'
+import InitCreateTest from './TestApp/CreateTest/InitCreateTest.vue';
+import { reactive } from "vue";
+
+let state = reactive({
+  AppStart: true,
+  InitCreateTest: false
+});
+
+function loadInitCreateTest()
+{
+  state.AppStart = false;
+  state.InitCreateTest = true;
+}
+
+
+</script>
 
 <style scoped>
 .main-container {
@@ -16,7 +32,7 @@ import TestApp from './TestApp/TestApp.vue'
   align-items: center;
   background: linear-gradient(to right, #a1c4fd, #c2e9fb); /* Modern background gradient */
   overflow: hidden; /* Prevent overflow */
-  padding: 20px; /* Add some padding */
+  width: 100%;; /* Add some padding */
   box-sizing: border-box; /* Ensure padding is included in the height */
 }
 

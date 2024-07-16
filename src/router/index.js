@@ -38,6 +38,11 @@ const router = createRouter({
       name: 'accountManagement',
       component: () => import('../views/AccountManagementView.vue')
     },
+    {
+      path:'/app/createTest',
+      name: 'createTest',
+      component: () => import('../views/testApp/CreateTest.vue')
+    }
 
   ]
 })
