@@ -1,60 +1,85 @@
 <template>
-    <nav class="nav">
-      <div :class="['overlay', { 'active': overlayVisible }]">
-        <RouterLink class="overlayLink" to="/"> Home </RouterLink>
-        <RouterLink class="overlayLink" to="/about"> About </RouterLink>
-        <RouterLink class="overlayLink" to="/app"> App </RouterLink>
-      </div>
-  
-      <div class="navLinkWrapper">
-        <RouterLink class="navLink" to="/"> Home </RouterLink>
-        <RouterLink class="navLink" to="/about"> About </RouterLink>
-        <RouterLink class="navLink" to="/app"> App </RouterLink>
-      </div>
-  
-      <div class="hamburgerWrapper" @click="toggleOverlay">
-        <img :src="hamburgerIcon" height="75px" width="75px" class="hamburger">
-      </div>
-  
-      <div class="LoginLinkContainer"> 
-        <RouterLink class="navLogin LoginLink" to="/login"> {{ store.logStatus ? store.email: "Login" }} </RouterLink>
-      </div>
-    </nav>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from "vue";
-  import { supabase } from "../clients/supabase";
-  import { useAccountStore } from "@/stores/account";
-  import hamburgerIcon from "@/assets/hamburgerMenu.png";
-  import hamburgerIconAnim from "@/assets/hamburgerMenuAnim.json";
-  
-  const store = useAccountStore();
-  
-  let sessionActive = ref(false);
-  let userEmail = ref("");
-  let overlayVisible = ref(false);
-  
-  async function checkSession() {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (user) {
-      sessionActive.value = true;
-      userEmail.value = user.email;
-    }
+  <nav class="nav">
+    <div :class="['overlay', { 'active': overlayVisible }]">
+      <RouterLink class="overlayLink" to="/"> Home </RouterLink>
+      <RouterLink class="overlayLink" to="/about"> About </RouterLink>
+      <RouterLink class="overlayLink" to="/app"> App </RouterLink>
+    </div>
+
+    <div class="navLinkWrapper">
+      <RouterLink class="navLink" to="/"> Home </RouterLink>
+      <RouterLink class="navLink" to="/about"> About </RouterLink>
+      <RouterLink class="navLink" to="/app"> App </RouterLink>
+    </div>
+
+    <div 
+      ref="lottieContainer" 
+      @click="toggleOverlay"
+      class="hamburgerWrapper" 
+      style="width: 75px; height: 75px; cursor: pointer;"
+    ></div>
+
+    <div class="LoginLinkContainer"> 
+      <RouterLink class="navLogin LoginLink" to="/login"> {{ store.logStatus ? store.email : "Login" }} </RouterLink>
+    </div>
+  </nav>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import { supabase } from "../clients/supabase";
+import { useAccountStore } from "@/stores/account";
+import lottie from "lottie-web";
+import hamburgerAnimationData from "@/assets/hamburgerMenuAnimWhite.json";
+
+const lottieContainer = ref(null);
+const animationInstance = ref(null);
+const isPlaying = ref(false);
+
+function toggleOverlay() {
+  overlayVisible.value = !overlayVisible.value;
+  toggleAnimation();
+}
+
+const toggleAnimation = () => {
+  if (!isPlaying.value) {
+    animationInstance.value.playSegments([0, 18], true); // Segment for hamburger to close
+  } else {
+    animationInstance.value.playSegments([18, 0], true); // Segment for close to hamburger
   }
+  isPlaying.value = !isPlaying.value;
+};
+
+const store = useAccountStore();
+
+let sessionActive = ref(false);
+let userEmail = ref("");
+let overlayVisible = ref(false);
+
+async function checkSession() {
+  const { data: { user } } = await supabase.auth.getUser();
   
-  function toggleOverlay() {
-    overlayVisible.value = !overlayVisible.value;
+  if (user) {
+    sessionActive.value = true;
+    userEmail.value = user.email;
   }
-  
-  onMounted(() => {
-    checkSession();
-    store.registerUser();
+}
+
+onMounted(() => {
+  checkSession();
+  store.registerUser();
+
+  animationInstance.value = lottie.loadAnimation({
+    container: lottieContainer.value,
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    animationData: hamburgerAnimationData
   });
-  </script>
-  
-  <style scoped>
+});
+</script>
+
+<style scoped>
   .nav {
     background-color: rgb(73, 173, 140);
     display: flex;
@@ -93,14 +118,8 @@
   .hamburgerWrapper {
     display: none;
     z-index: 1001;
-  }
-  
-  .hamburger {
     padding: 1em;
-    z-index: 1001;
   }
-  
-  .navLogin {}
   
   .overlay {
     position: fixed;
@@ -188,4 +207,4 @@
       padding: 0.4em;
     }
   }
-  </style>
+</style>
