@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
+import TestObject from '@/components/TestApp/CreateTest/testObject';
 
 export const useCreateTestStore = defineStore('createTest', {
     state: () => {
         return {
             title: "",
             numberOfQuestions: 0,
-            testID: "",
-            questionObject: {}
+            identifier: "",
+            active: false,
+            testObject: {}
         }
     },
 
@@ -16,8 +18,29 @@ export const useCreateTestStore = defineStore('createTest', {
         {
             console.log(this.title);
             console.log(this.numberOfQuestions);
-            console.log(this.testID);
+            console.log(this.identifier);
             console.log(this.questionObject);
+        },
+
+        populateTestObject()
+        {
+            this.testObject.title = this.title;
+            this.testObject.identifier = this.identifier;
+        },
+
+        getTitle()
+        {
+            return this.title;
+        },
+
+        getTestID()
+        {
+            return this.testID;
+        },
+
+        getTestObject()
+        {
+            return this.testObject;
         }
     }
 })

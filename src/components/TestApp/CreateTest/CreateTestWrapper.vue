@@ -1,37 +1,43 @@
 <template>
   <main class="main-container">
-    {{ state.title }}
-    {{ state.numberOfQuestions }}
-    <button @click="printObject"> printObject </button>
+    <questionCreator>
+      <template v-slot:title>
+        <h2> {{ state.title }}</h2>
+      </template>
+      
+      <template v-slot:questionNumber>
+        <p> Question: {{ state.currentQuestionNumber }}</p>
+      </template>
+    </questionCreator>
   </main>
 </template>
 
 <script setup>
+// A) This is the application wrapper for creating tests
+// B) Manages local app state for "CreateTest" functionality
+// C) Slots in components to create testObjects (answers/questions)
+
+// **REFER to "Create Test Diagram" for more info on create test app** //
+
 import { onMounted, reactive } from "vue";
 import { useCreateTestStore } from "@/stores/createTest";
 import testObject from "./testObject";
+import questionCreator from "./QuestionCreator.vue"; 
 
 const myCreateTestStore = useCreateTestStore();
 
 let state = reactive({
   modes: "questions",
   title: "",
-  numberOfQuestions: 0
+  numberOfQuestions: 0,
+  currentQuestionNumber: 1
 });
-
-let currentTestObject = new testObject("test", "test1");
 
 onMounted(() => {
   state.title = myCreateTestStore.title;
   state.numberOfQuestions = myCreateTestStore.numberOfQuestions;
   myCreateTestStore.getInfo();
 })
-
-function printObject()
-{
-  console.log(currentTestObject.title);
-  console.log(currentTestObject.identifier);
-}
 
 </script>
 

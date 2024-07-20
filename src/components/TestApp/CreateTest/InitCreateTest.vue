@@ -8,9 +8,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, createRenderer } from "vue";
 import { useRouter } from "vue-router";
 import { useCreateTestStore } from "@/stores/createTest";
+import TestObject from "./testObject";
 
 let title = ref("");
 let numberOfQuestions = ref("");
@@ -19,14 +20,29 @@ const createTestStore = useCreateTestStore();
 const router = useRouter();
 let uuid = self.crypto.randomUUID();
 
+// initializes CreateTestWrapper and updates pinia and soon cache
+// Refer to "Create Test Diagram" in documentation for application info
 function startCreateTest()
 {
   createTestStore.title = title.value;
   createTestStore.numberOfQuestions = numberOfQuestions.value;
-  createTestStore.testID = crypto.randomUUID();
+  createTestStore.identifier = crypto.randomUUID();
+  createTestStore.active = true;
+  createTestStore.testObject = new TestObject("test", "id");
+
+  createTestStore.populateTestObject();
 
   router.push("/app/createTest");
 }
+
+onMounted(() => {
+  window.addEventListener("keydown", (e) => {
+    if (e.key == "Enter")
+    {
+      startCreateTest();
+    }
+  })
+})
 
 
 </script>
